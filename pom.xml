@@ -2,37 +2,68 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
   <artifactId>QA_PIPELINE_PROJECT</artifactId>
   <version>1.0.0</version>
-  <packaging>jar</packaging>  <!-- or "war" if this is a webapp -->
+  <packaging>jar</packaging>
 
   <properties>
-    <cobertura.version>2.7</cobertura.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <cobertura.version>2.7</cobertura.version>
+    <jmeter.plugin.version>3.5.0</jmeter.plugin.version>
+    <shade.plugin.version>3.5.0</shade.plugin.version>
   </properties>
 
   <repositories>
     <repository>
       <id>jmeter-plugins-repo</id>
+      <name>JMeter Plugins Repository</name>
       <url>https://jmeter-plugins.org/maven/</url>
     </repository>
   </repositories>
 
   <dependencies>
-    <!-- Example: JMeter Plugins -->
+    <!-- Your application dependencies go here -->
+    <!-- Example: JUnit for unit testing -->
     <dependency>
-      <groupId>kg.apc</groupId>
-      <artifactId>jmeter-plugins</artifactId>
-      <version>1.4.0</version>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
     </dependency>
-    <!-- Your other deps go here -->
   </dependencies>
 
   <build>
     <plugins>
-      <!-- Cobertura for coverage + thresholds -->
+
+      <!-- JMeter Maven Plugin -->
+      <plugin>
+        <groupId>com.lazerycode.jmeter</groupId>
+        <artifactId>jmeter-maven-plugin</artifactId>
+        <version>${jmeter.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>jmeter-tests</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jmeter</goal>
+              <goal>results</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <testFilesIncluded>
+            <jMeterTestFile>**/*.jmx</jMeterTestFile>
+          </testFilesIncluded>
+          <resultsFileFormat>csv</resultsFileFormat>
+        </configuration>
+      </plugin>
+
+      <!-- Cobertura Plugin for Code Coverage -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
@@ -41,12 +72,16 @@
           <execution>
             <id>instrument</id>
             <phase>process-test-classes</phase>
-            <goals><goal>instrument</goal></goals>
+            <goals>
+              <goal>instrument</goal>
+            </goals>
           </execution>
           <execution>
             <id>report</id>
             <phase>verify</phase>
-            <goals><goal>cobertura</goal></goals>
+            <goals>
+              <goal>cobertura</goal>
+            </goals>
           </execution>
         </executions>
         <configuration>
@@ -61,15 +96,17 @@
         </configuration>
       </plugin>
 
-      <!-- Shade (Fat-JAR) -->
+      <!-- Maven Shade Plugin to build a fat-JAR -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.5.0</version>
+        <version>${shade.plugin.version}</version>
         <executions>
           <execution>
             <phase>package</phase>
-            <goals><goal>shade</goal></goals>
+            <goals>
+              <goal>shade</goal>
+            </goals>
             <configuration>
               <createDependencyReducedPom>true</createDependencyReducedPom>
               <transformers>
@@ -82,21 +119,7 @@
         </executions>
       </plugin>
 
-      <!-- (Optional) WAR plugin if you switch to webapp -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>3.4.0</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals><goal>war</goal></goals>
-          </execution>
-        </executions>
-        <configuration>
-          <failOnMissingWebXml>false</failOnMissingWebXml>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 </project>
+
