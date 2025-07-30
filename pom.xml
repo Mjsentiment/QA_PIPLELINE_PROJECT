@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
@@ -10,7 +11,7 @@
     <packaging>jar</packaging>
 
     <name>QA_PIPELINE_PROJECT</name>
-    <description>Pipeline project for Unit Testing, Metrics, Packaging, Selenium & JMeter</description>
+    <description>Pipeline project for Unit Testing, Metrics, Packaging, Selenium &amp; JMeter</description>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
