@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'Maven3'    // Ensure Maven is installed in Jenkins
-        jdk 'JDK21'       // Adjust based on project
+        jdk 'jdk21'       // Adjust based on project
     }
 
     triggers {
